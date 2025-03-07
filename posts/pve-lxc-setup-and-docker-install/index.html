@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html itemscope itemtype="http://schema.org/WebPage" lang="en-us">
+  <head>
+    
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+    <meta name="robots" content="noodp" />
+    <title>PVE系列-初始化LXC容器并安装Docker - Gavin&#39;s Blog</title><meta name="author" content="w2422">
+<meta name="description" content="下载模板前请务必确保已经替换过LXC源，若还未替换可参考[《PVE系列-更换软件&amp;容器源》](https://gvnote.com/p/replace-lxc-container-source)进行更换LXC源操作。"><meta name="keywords" content='LXC容器初始化'>
+  <meta itemprop="name" content="PVE系列-初始化LXC容器并安装Docker">
+  <meta itemprop="description" content="下载模板前请务必确保已经替换过LXC源，若还未替换可参考[《PVE系列-更换软件&amp;容器源》](https://gvnote.com/p/replace-lxc-container-source)进行更换LXC源操作。">
+  <meta itemprop="datePublished" content="2024-02-29T17:34:49+00:00">
+  <meta itemprop="dateModified" content="2024-02-29T17:34:49+00:00">
+  <meta itemprop="wordCount" content="385">
+  <meta itemprop="keywords" content="LXC容器初始化"><meta property="og:url" content="https://www.gvnote.com/posts/pve-lxc-setup-and-docker-install/">
+  <meta property="og:site_name" content="Gavin&#39;s Blog">
+  <meta property="og:title" content="PVE系列-初始化LXC容器并安装Docker">
+  <meta property="og:description" content="下载模板前请务必确保已经替换过LXC源，若还未替换可参考[《PVE系列-更换软件&amp;容器源》](https://gvnote.com/p/replace-lxc-container-source)进行更换LXC源操作。">
+  <meta property="og:locale" content="en_us">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2024-02-29T17:34:49+00:00">
+    <meta property="article:modified_time" content="2024-02-29T17:34:49+00:00">
+    <meta property="article:tag" content="Pve">
+    <meta property="article:tag" content="Lxc">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="PVE系列-初始化LXC容器并安装Docker">
+  <meta name="twitter:description" content="下载模板前请务必确保已经替换过LXC源，若还未替换可参考[《PVE系列-更换软件&amp;容器源》](https://gvnote.com/p/replace-lxc-container-source)进行更换LXC源操作。">
+<meta name="application-name" content="FixIt">
+<meta name="apple-mobile-web-app-title" content="FixIt"><meta name="theme-color" data-light="#f8f8f8" data-dark="#252627" content="#f8f8f8"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="canonical" type="text/html" href="https://www.gvnote.com/posts/pve-lxc-setup-and-docker-install/" title="PVE系列-初始化LXC容器并安装Docker - Gavin&#39;s Blog" /><link rel="prev" type="text/html" href="https://www.gvnote.com/posts/platform-thrid-ide-installation/" title="使用Clion配置Ardunio开发环境" /><link rel="next" type="text/html" href="https://www.gvnote.com/posts/replace-lxc-container-source/" title="PVE系列-更换软件&amp;容器源" /><link rel="alternate" type="text/markdown" href="https://www.gvnote.com/posts/pve-lxc-setup-and-docker-install/index.md" title="PVE系列-初始化LXC容器并安装Docker - Gavin's Blog"><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" href="/lib/animate/animate.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "BlogPosting",
+    "headline": "PVE系列-初始化LXC容器并安装Docker",
+    "inLanguage": "en-us",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "https:\/\/www.gvnote.com\/posts\/pve-lxc-setup-and-docker-install\/"
+    },"genre": "posts","keywords": "pve, lxc","wordcount":  385 ,
+    "url": "https:\/\/www.gvnote.com\/posts\/pve-lxc-setup-and-docker-install\/","datePublished": "2024-02-29T17:34:49+00:00","dateModified": "2024-02-29T17:34:49+00:00","publisher": {
+      "@type": "Organization",
+      "name": ""},"author": {
+        "@type": "Person",
+        "name": "w2422"
+      },"description": "下载模板前请务必确保已经替换过LXC源，若还未替换可参考[《PVE系列-更换软件\u0026容器源》](https://gvnote.com/p/replace-lxc-container-source)进行更换LXC源操作。"
+  }
+  </script><script src="/js/head/color-scheme.min.js"></script></head>
+  <body data-header-desktop="sticky" data-header-mobile="auto"><div class="wrapper" data-page-style="normal"><header class="desktop animate__faster" id="header-desktop">
+  <div class="header-wrapper">
+    <div class="header-title">
+      <a href="/" title="Gavin&#39;s Blog"><span class="header-title-text">Gavin&#39;s Blog</span></a><span class="header-subtitle"></span></div>
+    <nav>
+      <ul class="menu"><li class="menu-item">
+              <a class="menu-link" href="/archives/"><i class="fa-solid fa-archive fa-fw fa-sm" aria-hidden="true"></i> Archives</a></li><li class="menu-item">
+              <a class="menu-link" href="/categories/"><i class="fa-solid fa-folder-tree fa-fw fa-sm" aria-hidden="true"></i> Categories</a></li><li class="menu-item">
+              <a class="menu-link" href="/tags/"><i class="fa-solid fa-tags fa-fw fa-sm" aria-hidden="true"></i> Tags</a></li><li class="menu-item delimiter"></li><li class="menu-item search" id="search-desktop">
+            <input type="text" placeholder="Search titles or contents ..." id="search-input-desktop">
+            <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="Search">
+              <i class="fa-solid fa-search fa-fw" aria-hidden="true"></i>
+            </a>
+            <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="Clear">
+              <i class="fa-solid fa-times-circle fa-fw" aria-hidden="true"></i>
+            </a>
+            <span class="search-button search-loading" id="search-loading-desktop">
+              <i class="fa-solid fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+            </span>
+          </li><li class="menu-item theme-switch" title="Switch Theme">
+          <i class="fa-solid fa-adjust fa-fw" aria-hidden="true"></i>
+        </li></ul>
+    </nav>
+  </div>
+</header><header class="mobile animate__faster" id="header-mobile">
+  <div class="header-container">
+    <div class="header-wrapper">
+      <div class="header-title">
+        <a href="/" title="Gavin&#39;s Blog"><span class="header-title-text">Gavin&#39;s Blog</span></a><span class="header-subtitle"></span></div>
+      <div class="menu-toggle" id="menu-toggle-mobile">
+        <span></span><span></span><span></span>
+      </div>
+    </div>
+    <nav>
+      <ul class="menu" id="menu-mobile"><li class="search-wrapper">
+            <div class="search mobile" id="search-mobile">
+              <input type="text" placeholder="Search titles or contents ..." id="search-input-mobile">
+              <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="Search">
+                <i class="fa-solid fa-search fa-fw" aria-hidden="true"></i>
+              </a>
+              <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="Clear">
+                <i class="fa-solid fa-times-circle fa-fw" aria-hidden="true"></i>
+              </a>
+              <span class="search-button search-loading" id="search-loading-mobile">
+                <i class="fa-solid fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+              </span>
+            </div>
+            <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+              Cancel
+            </a>
+          </li><li class="menu-item"><a class="menu-link" href="/archives/"><i class="fa-solid fa-archive fa-fw fa-sm" aria-hidden="true"></i> Archives</a></li><li class="menu-item"><a class="menu-link" href="/categories/"><i class="fa-solid fa-folder-tree fa-fw fa-sm" aria-hidden="true"></i> Categories</a></li><li class="menu-item"><a class="menu-link" href="/tags/"><i class="fa-solid fa-tags fa-fw fa-sm" aria-hidden="true"></i> Tags</a></li><li class="menu-item menu-system">
+          <span class="menu-system-item theme-switch" title="Switch Theme"><i class="fa-solid fa-adjust fa-fw" aria-hidden="true"></i></span></li>
+      </ul>
+    </nav>
+  </div>
+</header><div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+  </div>
+  <div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+  </div><main class="container"><aside class="aside-collection animate__animated animate__fadeIn animate__faster" aria-label="Collections"></aside>
+
+  <article class="page single">
+    <div class="header"><h1 class="single-title animate__animated animate__flipInX"><span>PVE系列-初始化LXC容器并安装Docker</span>
+      </h1></div><div class="post-meta">
+      <div class="post-meta-line"><span class="post-author"><a href="https://www.gvnote.com" title="Author"target="_blank" rel="external nofollow noopener noreferrer author" class="author"><img loading="lazy" src="https://gravatar.com/avatar/cce519668d79a5254801e11933df656a?size=128" alt="w2422" data-title="w2422" width="20" height="20" class="avatar" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/>&nbsp;w2422</a></span><span class="post-included-in">&nbsp;included in <a href="/categories/pve/" class="post-category" title="Category - Pve"><i class="fa-regular fa-folder fa-fw" aria-hidden="true"></i> Pve</a> and <a href="/collections/pve/" class="post-collection" title="Collection - Pve"><i class="fa-solid fa-layer-group fa-fw" aria-hidden="true"></i> Pve</a></span></div><div class="post-meta-line"><span title="published on 2024-02-29 17:34:49"><i class="fa-solid fa-calendar-days fa-fw me-1" aria-hidden="true"></i><time datetime="2024-02-29">2024-02-29</time></span>&nbsp;<span title="385 words"><i class="fa-solid fa-pencil-alt fa-fw me-1" aria-hidden="true"></i>About 400 words</span>&nbsp;<span><i class="fa-regular fa-clock fa-fw me-1" aria-hidden="true"></i>2 minutes</span>&nbsp;</div>
+    </div><div class="details toc" id="toc-static" data-kept="false">
+        <div class="details-summary toc-title">
+          <span>Contents</span>
+          <span><i class="details-icon fa-solid fa-angle-right" aria-hidden="true"></i></span>
+        </div>
+        <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#模板下载">模板下载</a></li>
+        <li><a href="#创建lxc容器">创建LXC容器</a></li>
+        <li><a href="#启动lxc容器">启动LXC容器</a>
+          <ul>
+            <li><a href="#初始化配置">初始化配置</a></li>
+          </ul>
+        </li>
+        <li><a href="#核显配置">核显配置</a></li>
+        <li><a href="#安装docker">安装Docker</a>
+          <ul>
+            <li><a href="#docker-compose安装">docker-compose安装</a></li>
+            <li><a href="#配置gitlab">配置Gitlab</a></li>
+            <li><a href="#优化gitlab">优化gitlab</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav></div>
+      </div><div class="content" id="content"><h3 id="模板下载" class="heading-element"><span>模板下载</span>
+  <a href="#%e6%a8%a1%e6%9d%bf%e4%b8%8b%e8%bd%bd" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><p>​	下载模板前请务必确保已经替换过LXC源，若还未替换可参考<a href="https://www.gvnote.com/posts/replace-lxc-container-source"target="_blank" rel="external nofollow noopener noreferrer">《PVE系列-更换软件&amp;容器源》</a>进行更换LXC源操作。</p>
+<p>​	在PVE后台页面选择 <code>local(pve)</code> -&gt; <code>CT模板</code> -&gt; <code>模板</code> 选择对应镜像下载。这里以debian12为例：</p>
+<img src="./assets/image-20240228104504044-1741313025781-1-1741333679444-1.png" alt="image-20240228104504044" style="zoom:80%;" />
+<p>​	点击下载并等待下载完成。</p>
+<img src="./assets/image-20240228105502754-1741313025781-2-1741333679444-4.png" alt="image-20240228105502754" style="zoom:80%;" />
+<h3 id="创建lxc容器" class="heading-element"><span>创建LXC容器</span>
+  <a href="#%e5%88%9b%e5%bb%balxc%e5%ae%b9%e5%99%a8" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><p>​	点击右上方<code>创建CT</code> 来创建LXC容器</p>
+<img src="./assets/image-20240228105640475-1741313025781-3-1741333679444-7.png" alt="image-20240228105640475" style="zoom:80%;" />
+<p>​	勾选<code>无特权的容器</code> 选项并填写配置信息</p>
+<img src="./assets/image-20240228110312699-1741313025781-4-1741333679444-2.png" alt="image-20240228110312699" style="zoom:80%;" />
+<p>​	模板选择刚下载好的debian12</p>
+<img src="./assets/image-20240228110454078-1741313025781-5-1741333679444-9.png" alt="image-20240228110454078" style="zoom:80%;" />
+<p>​	根据实际需要划分磁盘大小，笔者这边有存储需要，因此新增了一块存储磁盘</p>
+<img src="./assets/image-20240228112447781-1741313025781-7-1741333679444-3.png" alt="image-20240228112447781" style="zoom:80%;" />
+<img src="./assets/image-20240228112539337-1741313025781-6-1741333679444-5.png" alt="image-20240228112539337" style="zoom:80%;" />
+<p>​	CPU和内存分配根据实际需求划分即可。这边以运行gitlab为例，2C8G200G。</p>
+<p>​	网络配置</p>
+<img src="./assets/image-20240228112646165-1741313025781-8-1741333679444-6.png" alt="image-20240228112646165" style="zoom:80%;" />
+<p>​	若ipv6获取不到地址，切换为SLAAC尝试下</p>
+<p>​	DNS保持默认即可</p>
+<img src="./assets/image-20240228112729055-1741313025781-9-1741333679444-8.png" alt="image-20240228112729055" style="zoom:80%;" />
+<p>​	等待创建完成</p>
+<img src="./assets/image-20240228112805860-1741313025781-10-1741333679444-10.png" alt="image-20240228112805860" style="zoom:80%;" />
+<h3 id="启动lxc容器" class="heading-element"><span>启动LXC容器</span>
+  <a href="#%e5%90%af%e5%8a%a8lxc%e5%ae%b9%e5%99%a8" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><p>​	创建完成后，来到选项<code>控制台模式</code> 调整为<code> shell</code> ，否则启动后是黑屏状态。<img src="./assets/image-20240228145000182-1741313025781-11-1741333679444-11.png" alt="image-20240228145000182" style="zoom:80%;" /></p>
+<pre><code>调整为shell后再点击启动。
+</code></pre>
+<img src="./assets/image-20240228143836850-1741313025781-12-1741333679444-12.png" alt="image-20240228143836850" style="zoom:80%;" />
+<p>​	点开控制台，开启远程链接。</p>
+<img src="./assets/image-20240228145421247-1741313025781-13-1741333679444-13.png" alt="image-20240228145421247" style="zoom:80%;" />
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1">#允许远程登录</span>
+</span></span><span class="line"><span class="cl">sed -i <span class="s1">&#39;/PermitRootLogin/ a PermitRootLogin yes&#39;</span> /etc/ssh/sshd_config
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">#重启ssh服务</span>
+</span></span><span class="line"><span class="cl">systemctl restart sshd</span></span></code></pre></td></tr></table>
+</div>
+</div><p>​	ok，使用<code>ssh终端</code>测试能否链接上</p>
+<img src="./assets/image-20240228145833603-1741313025781-14-1741333679444-14.png" alt="image-20240228145833603" style="zoom:80%;" />
+<h4 id="初始化配置" class="heading-element"><span>初始化配置</span>
+  <a href="#%e5%88%9d%e5%a7%8b%e5%8c%96%e9%85%8d%e7%bd%ae" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h4><p><strong>时区</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">dpkg-reconfigure tzdata</span></span></code></pre></td></tr></table>
+</div>
+</div><img src="./assets/image-20240228150243234-1741313025781-15-1741333679444-15.png" alt="image-20240228150243234" style="zoom:80%;" />
+<p><strong>语言</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">dpkg-reconfigure locales</span></span></code></pre></td></tr></table>
+</div>
+</div><img src="./assets/image-20240228150329403-1741313025781-16-1741333679444-16.png" alt="image-20240228150329403" style="zoom:67%;" />
+<p><strong>软件源更换</strong></p>
+<p>​	由于模板并未预装 curl，所以我们需要手动安装下</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">apt update
+</span></span><span class="line"><span class="cl">apt install curl</span></span></code></pre></td></tr></table>
+</div>
+</div><p><img src="./assets/image-20240228150717838-1741313025781-17-1741333679444-17.png" alt="image-20240228150717838" style="zoom:80%;" /></p>
+<p>​	完成之后再执行下属命令</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">bash &lt;<span class="o">(</span>curl -sSL https://linuxmirrors.cn/main.sh<span class="o">)</span></span></span></code></pre></td></tr></table>
+</div>
+</div><img src="./assets/image-20240228150829822-1741313025781-18-1741333679445-19.png" alt="image-20240228150829822" style="zoom:80%;" />
+<h3 id="核显配置" class="heading-element"><span>核显配置</span>
+  <a href="#%e6%a0%b8%e6%98%be%e9%85%8d%e7%bd%ae" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><p>​	如果你创建的LXC容器不需要使用核显的话，这一部分可以跳过。</p>
+<p>​	【注意】下述操作需要在<strong>宿主机</strong>操作</p>
+<p>​	使用命令<code>ls -l /dev/dri</code> 查询硬件信息</p>
+<img src="./assets/image-20240228153102606-1741313025781-19-1741333679445-18.png" alt="image-20240228153102606" style="zoom:80%;" />
+<p>​	这里的226,0和226,128是主次设备号</p>
+<p>​	编辑配置文件<code>/etc/pve/lxc/容器id.conf</code></p>
+<p>​	我这边是 /etc/pve/lxc/100.conf</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1">#新增下列内容</span>
+</span></span><span class="line"><span class="cl">lxc.cgroup2.devices.allow: c 226:0 rwm
+</span></span><span class="line"><span class="cl">lxc.cgroup2.devices.allow: c 226:128 rwm
+</span></span><span class="line"><span class="cl">lxc.cgroup2.devices.allow: c 29:0 rwm
+</span></span><span class="line"><span class="cl">lxc.mount.entry: /dev/dri dev/dri none bind,optional,create<span class="o">=</span>dir
+</span></span><span class="line"><span class="cl">lxc.mount.entry: /dev/fb0 dev/fb0 none bind,optional,create<span class="o">=</span>file
+</span></span><span class="line"><span class="cl">lxc.apparmor.profile: unconfined</span></span></code></pre></td></tr></table>
+</div>
+</div><p>​	参数说明：</p>
+<p>​	<code>lxc.apparmor.profile: unconfined</code>用于关闭 LXC 容器的apparmor保护，开启状态无法安装 Docker</p>
+<blockquote>
+<p>Tips</p>
+<p>​	核显这部分内容还尚未测试</p></blockquote>
+<h3 id="安装docker" class="heading-element"><span>安装Docker</span>
+  <a href="#%e5%ae%89%e8%a3%85docker" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><p>​	设置docker的apt源</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">sudo apt-get update
+</span></span><span class="line"><span class="cl">sudo apt-get install ca-certificates curl
+</span></span><span class="line"><span class="cl">sudo install -m <span class="m">0755</span> -d /etc/apt/keyrings
+</span></span><span class="line"><span class="cl">sudo curl -fsSL https://download.docker.com/linux/debian/gpg -o /etc/apt/keyrings/docker.asc
+</span></span><span class="line"><span class="cl">sudo chmod a+r /etc/apt/keyrings/docker.asc</span></span></code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="nb">echo</span> <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>  <span class="s2">&#34;deb [arch=</span><span class="k">$(</span>dpkg --print-architecture<span class="k">)</span><span class="s2"> signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/debian \
+</span></span></span><span class="line"><span class="cl"><span class="s2">  </span><span class="k">$(</span>. /etc/os-release <span class="o">&amp;&amp;</span> <span class="nb">echo</span> <span class="s2">&#34;</span><span class="nv">$VERSION_CODENAME</span><span class="s2">&#34;</span><span class="k">)</span><span class="s2"> stable&#34;</span> <span class="p">|</span> <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>  sudo tee /etc/apt/sources.list.d/docker.list &gt; /dev/null
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">sudo apt-get update</span></span></code></pre></td></tr></table>
+</div>
+</div><p><img loading="lazy" src="./assets/image-20240228152123636-1741313025781-20-1741333679445-20.png" alt="image-20240228152123636" srcset="./assets/image-20240228152123636-1741313025781-20-1741333679445-20.png?size=small, ./assets/image-20240228152123636-1741313025781-20-1741333679445-20.png?size=medium 1.5x, ./assets/image-20240228152123636-1741313025781-20-1741333679445-20.png?size=large 2x" data-title="image-20240228152123636" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/></p>
+<p>​	安装docker软件包</p>
+<img src="./assets/image-20240228152148834-1741313025781-21-1741333679445-22.png" alt="image-20240228152148834" style="zoom:80%;" />
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin</span></span></code></pre></td></tr></table>
+</div>
+</div><p>​	验证是否安装成功</p>
+<img src="./assets/image-20240228152201205-1741313025781-22-1741333679445-21.png" alt="image-20240228152201205" style="zoom:80%;" />
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">sudo docker run hello-world</span></span></code></pre></td></tr></table>
+</div>
+</div><p>​	开机启动</p>
+<img src="./assets/image-20240228152213417-1741313025781-23-1741333679445-23.png" alt="image-20240228152213417" style="zoom:80%;" />
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">systemctrl <span class="nb">enable</span> docker</span></span></code></pre></td></tr></table>
+</div>
+</div><h4 id="docker-compose安装" class="heading-element"><span>docker-compose安装</span>
+  <a href="#docker-compose%e5%ae%89%e8%a3%85" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h4><p>​	下载compose</p>
+<img src="./assets/image-20240228152430215-1741313025781-24-1741333679445-24.png" alt="image-20240228152430215" style="zoom:80%;" />
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">curl -SL https://github.com/docker/compose/releases/download/v2.24.6/docker-compose-linux-x86_64 -o /usr/local/bin/docker-compose</span></span></code></pre></td></tr></table>
+</div>
+</div><p>​	赋予权限</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">chmod +x /usr/local/bin/docker-compose</span></span></code></pre></td></tr></table>
+</div>
+</div><p>​	测试</p>
+<img src="./assets/image-20240228152852593-1741313025781-25-1741333679445-25.png" alt="image-20240228152852593" style="zoom:80%;" />
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">docker-compose </span></span></code></pre></td></tr></table>
+</div>
+</div><h4 id="配置gitlab" class="heading-element"><span>配置Gitlab</span>
+  <a href="#%e9%85%8d%e7%bd%aegitlab" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h4><p>​	使用docker-compose的方式部署，这里直接放上配置文件</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;3.6&#39;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">services</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">gitlab</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l">gitlab/gitlab-ce:latest</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">container_name</span><span class="p">:</span><span class="w"> </span><span class="l">gitlab</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">restart</span><span class="p">:</span><span class="w"> </span><span class="l">always</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">hostname</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;192.168.10.102&#39;</span><span class="w"> </span><span class="c">#没有域名填写本机ip</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">environment</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">TZ</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;Asia/Shanghai&#39;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">GITLAB_OMNIBUS_CONFIG</span><span class="p">:</span><span class="w"> </span><span class="p">|</span><span class="sd">
+</span></span></span><span class="line"><span class="cl"><span class="sd">        external_url &#39;http://192.168.10.102&#39; #可填本机ip
+</span></span></span><span class="line"><span class="cl"><span class="sd">        gitlab_rails[&#39;time_zone&#39;] = &#39;Asia/Shanghai&#39;
+</span></span></span><span class="line"><span class="cl"><span class="sd">        gitlab_rails[&#39;backup_keep_time&#39;] = 1296000 # 15 Day, 1296000 seconds
+</span></span></span><span class="line"><span class="cl"><span class="sd">        gitlab_rails[&#39;gitlab_shell_ssh_port&#39;] = 2222  #ssh端口
+</span></span></span><span class="line"><span class="cl"><span class="sd">        #CI/CD
+</span></span></span><span class="line"><span class="cl"><span class="sd">        gitlab_rails[&#39;gitlab_default_projects_features_builds&#39;] = false
+</span></span></span><span class="line"><span class="cl"><span class="sd">        #自定义头像
+</span></span></span><span class="line"><span class="cl"><span class="sd">        gitlab_rails[&#39;gravatar_plain_url&#39;] = &#39;http://www.gravatar.com/avatar/%{hash}?s=%{size}&amp;d=identicon&#39;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">ports</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="s1">&#39;2080:80&#39;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="s1">&#39;2443:443&#39;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="s1">&#39;2222:22&#39;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">volumes</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="s1">&#39;/data/gitlab/config:/etc/gitlab&#39;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="s1">&#39;/data/gitlab/logs:/var/log/gitlab&#39;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="s1">&#39;/data/gitlab/data:/var/opt/gitlab&#39;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">shm_size</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;256m&#39;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"> </span></span></span></code></pre></td></tr></table>
+</div>
+</div><h4 id="优化gitlab" class="heading-element"><span>优化gitlab</span>
+  <a href="#%e4%bc%98%e5%8c%96gitlab" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h4><p>修改gitlab的配置，找到/etc/gitlab/gitlab.rb文件，添加下属配置：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1">#puma相关</span>
+</span></span><span class="line"><span class="cl">puma<span class="o">[</span><span class="s1">&#39;worker_timeout&#39;</span><span class="o">]</span> <span class="o">=</span> <span class="m">60</span>
+</span></span><span class="line"><span class="cl">puma<span class="o">[</span><span class="s1">&#39;worker_processes&#39;</span><span class="o">]</span> <span class="o">=</span> <span class="m">2</span>
+</span></span><span class="line"><span class="cl">puma<span class="o">[</span><span class="s1">&#39;per_worker_max_memory_mb&#39;</span><span class="o">]</span> <span class="o">=</span> <span class="m">768</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#postgresql相关</span>
+</span></span><span class="line"><span class="cl">postgresql<span class="o">[</span><span class="s1">&#39;max_worker_processes&#39;</span><span class="o">]</span> <span class="o">=</span> <span class="m">4</span>
+</span></span><span class="line"><span class="cl">postgresql<span class="o">[</span><span class="s1">&#39;shared_buffers&#39;</span><span class="o">]</span> <span class="o">=</span> <span class="s2">&#34;128MB&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#关闭prometheus</span>
+</span></span><span class="line"><span class="cl">prometheus_monitoring<span class="o">[</span><span class="s1">&#39;enable&#39;</span><span class="o">]</span> <span class="o">=</span> <span class="nb">false</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#sidekiq相关</span>
+</span></span><span class="line"><span class="cl">sidekiq<span class="o">[</span><span class="s1">&#39;max_concurrency&#39;</span><span class="o">]</span> <span class="o">=</span> <span class="m">10</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>相关参数设置参考官方给出的配置</p>
+<p><a href="https://docs.gitlab.com/omnibus/settings/memory_constrained_envs.html"target="_blank" rel="external nofollow noopener noreferrer">https://docs.gitlab.com/omnibus/settings/memory_constrained_envs.html</a></p></div><div class="post-footer" id="post-footer">
+  <div class="post-info">
+    <div class="post-info-line">
+      <div class="post-info-mod">
+        <span title="Updated on 2024-02-29 17:34:49">Updated on 2024-02-29&nbsp;</span>
+      </div><div class="post-info-license">
+            <span><a rel="license external nofollow noopener noreferrer" href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a></span>
+          </div></div><div class="post-info-line">
+        <div class="post-info-md"><span><a href="/posts/pve-lxc-setup-and-docker-install/index.md" title="Read Markdown" class="link-to-markdown">Read Markdown</a></span></div>
+        <div class="post-info-share">
+          <span><a href="javascript:void(0);" title="Share on X" data-sharer="twitter" data-url="https://www.gvnote.com/posts/pve-lxc-setup-and-docker-install/" data-title="PVE系列-初始化LXC容器并安装Docker" data-hashtags="pve,lxc"><i class="fa-brands fa-x-twitter fa-fw" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="Share on Facebook" data-sharer="facebook" data-url="https://www.gvnote.com/posts/pve-lxc-setup-and-docker-install/" data-hashtag="pve"><i class="fa-brands fa-facebook-square fa-fw" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="Share on 微博" data-sharer="weibo" data-url="https://www.gvnote.com/posts/pve-lxc-setup-and-docker-install/" data-title="PVE系列-初始化LXC容器并安装Docker"><i class="fa-brands fa-weibo fa-fw" aria-hidden="true"></i></a>
+  </span>
+        </div>
+      </div></div>
+
+  <div class="post-info-more">
+    <section class="post-tags"><i class="fa-solid fa-tags fa-fw me-1" aria-hidden="true"></i><a href="/tags/pve/" class="post-tag" title="Tags - Pve">Pve</a><a href="/tags/lxc/" class="post-tag" title="Tags - Lxc">Lxc</a></section>
+    <section>
+      <span><a href="javascript:void(0);" onclick="window.history.back();">Back</a></span>&nbsp;|&nbsp;<span><a href="/">Home</a></span>
+    </section>
+  </div><div class="post-nav"><a href="/posts/platform-thrid-ide-installation/" class="post-nav-item" rel="prev" title="使用Clion配置Ardunio开发环境"><i class="fa-solid fa-angle-left fa-fw" aria-hidden="true"></i>使用Clion配置Ardunio开发环境</a><a href="/posts/replace-lxc-container-source/" class="post-nav-item" rel="next" title="PVE系列-更换软件&amp;容器源">PVE系列-更换软件&amp;容器源<i class="fa-solid fa-angle-right fa-fw" aria-hidden="true"></i></a></div>
+</div>
+<div id="comments"><div id="giscus" class="comment">
+          <script
+            src="https://giscus.app/client.js"
+            data-repo="z242235718/Blog"
+            data-repo-id="R_kgDOOEkmRQ"
+            data-category="Announcements"
+            data-category-id="DIC_kwDOOEkmRc4CnpwG"
+            data-mapping="pathname"
+            data-strict="0"
+            
+            data-theme="preferred_color_scheme"
+            data-reactions-enabled="1"
+            data-emit-metadata="0"
+            data-input-position="bottom"
+            data-lang="zh-CN"
+            data-loading="lazy"
+            crossorigin="anonymous"
+            async
+            defer
+          ></script>
+        </div>
+        <noscript>
+          Please enable JavaScript to view the comments powered by <a href="https://giscus.app/" rel="external nofollow noopener noreferrer">giscus</a>.
+        </noscript></div></article>
+
+  <aside class="toc" id="toc-auto" aria-label="Contents"><h2 class="toc-title">Contents&nbsp;<i class="toc-icon fa-solid fa-angle-down fa-fw" aria-hidden="true"></i></h2>
+      <div class="toc-content" id="toc-content-auto"></div></aside></main><footer class="footer">
+    <div class="footer-container"><div class="footer-line powered">Powered by <a href="https://gohugo.io/" target="_blank" rel="external nofollow noopener noreferrer" title="Hugo 0.144.2">Hugo</a> | Theme - <a href="https://github.com/hugo-fixit/FixIt" target="_blank" rel="external" title="FixIt v0.3.16">FixIt</a>
+        </div><div class="footer-line copyright" itemscope itemtype="http://schema.org/CreativeWork"><i class="fa-regular fa-copyright fa-fw" aria-hidden="true"></i>
+            <span itemprop="copyrightYear">2023 - 2025</span><span class="author" itemprop="copyrightHolder">
+              <a href="https://www.gvnote.com"target="_blank" rel="external nofollow noopener noreferrer">w2422</a></span><span class="license footer-divider"><a rel="license external nofollow noopener noreferrer" href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a></span></div></div>
+  </footer></div><div class="widgets"><div class="fixed-buttons animate__faster d-none"><div class="fixed-button back-to-top" role="button" aria-label="Back to Top"><i class="fa-solid fa-arrow-up fa-fw" aria-hidden="true"></i><span class="variant-numeric d-none">0%</span>
+        </div><div class="fixed-button view-comments d-none" role="button" aria-label="View Comments"><i class="fa-solid fa-comment fa-fw" aria-hidden="true"></i></div></div><div id="mask"></div><noscript>
+    <div class="noscript-warning">This website works best with JavaScript enabled.</div>
+  </noscript>
+</div><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.css"><script src="/lib/autocomplete/autocomplete.min.js" defer></script><script src="/lib/fuse/fuse.min.js" defer></script><script src="/lib/sharer/sharer.min.js" async defer></script><script src="/lib/cookieconsent/cookieconsent.min.js" defer></script><script>window.config={"code":{"copyTitle":"Copy to clipboard","editLockTitle":"Lock editable code block","editUnLockTitle":"Unlock editable code block","editable":true,"maxShownLines":10},"comment":{"enable":true,"expired":false,"giscus":{"darkTheme":"dark","lightTheme":"light","origin":"https://giscus.app"}},"cookieconsent":{"content":{"dismiss":"Got it!","link":"Learn more","message":"This website uses Cookies to improve your experience."},"enable":true,"palette":{"button":{"background":"#f0f0f0"},"popup":{"background":"#1aa3ff"}},"theme":"edgeless"},"search":{"distance":100,"findAllMatches":false,"fuseIndexURL":"/search.json","highlightTag":"em","ignoreFieldNorm":false,"ignoreLocation":false,"isCaseSensitive":false,"location":0,"maxResultLength":10,"minMatchCharLength":2,"noResultsFound":"No results found","snippetLength":30,"threshold":0.3,"type":"fuse","useExtendedSearch":false},"version":"v0.3.16"};</script><script src="/js/theme.min.js" defer></script></body>
+</html>
