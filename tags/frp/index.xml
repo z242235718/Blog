@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Frp - Tag - Gavin&#39;s Blog</title>
+    <link>https://www.gvnote.com/tags/frp/</link>
+    <description>Gavin&#39;s Blog</description>
+    <generator>Hugo 0.144.2 &amp; FixIt v0.3.16</generator>
+    <language>en-us</language>
+    <managingEditor>w242235718@outlook.com (w2422)</managingEditor>
+    <webMaster>w242235718@outlook.com (w2422)</webMaster>
+    <lastBuildDate>Fri, 07 Mar 2025 16:25:47 +0800</lastBuildDate>
+    <atom:link href="https://www.gvnote.com/tags/frp/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>FRP配置TLS双向加密连接</title>
+      <link>https://www.gvnote.com/posts/frp-configuration-for-mutual-tls-encrypted/</link>
+      <pubDate>Fri, 07 Mar 2025 16:25:47 +0800</pubDate><author>w242235718@outlook.com (w2422)</author>
+      <guid>https://www.gvnote.com/posts/frp-configuration-for-mutual-tls-encrypted/</guid>
+      <category domain="https://www.gvnote.com/categories/frp/">Frp</category>
+      <description>记录一下frp如何配置TLS双向加密，以防后面忘记如何配置。建立任意一个文件夹...</description>
+    </item>
+  </channel>
+</rss>
