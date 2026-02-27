@@ -1034,12 +1034,12 @@ Mix = false
 
 # FixIt 0.2.15 | CHANGED Comment config
 [page.comment]
-enable = false
+enable = true
 
 # FixIt 0.2.13 | NEW Artalk comment config (https://artalk.js.org/)
 [page.comment.artalk]
 enable = false
-server = "https://yourdomain"
+server = "https://www.gvnote.com"
 site = "默认站点"
 # FixIt 0.3.3 | NEW whether use backend configuration
 useBackendConf = false
@@ -1179,19 +1179,19 @@ katex = false
 
 # FixIt 0.2.14 | NEW Giscus comments config
 [page.comment.giscus]
-enable = false
-repo = ""
-repoId = ""
-category = ""
-categoryId = ""
-mapping = ""
+enable = true
+repo = "z242235718/Blog"
+repoId = "R_kgDORaTkAg"
+category = "Show and tell"
+categoryId = "DIC_kwDORaTkAs4C3VGf"
+mapping = "pathname"
 origin = "https://giscus.app" # FixIt NEW | 0.3.7 Or set it to your self-hosted domain
 strict = "0" # FixIt NEW | 0.2.18
 term = ""
 reactionsEnabled = "1"
 emitMetadata = "0"
 inputPosition = "bottom" # ["top", "bottom"]
-lang = ""
+lang = "zh-CN"
 lightTheme = "light"
 darkTheme = "dark"
 lazyLoad = true
