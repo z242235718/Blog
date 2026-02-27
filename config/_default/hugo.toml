@@ -6,15 +6,15 @@
 # website title
 title = "Gavin's Blog"
 # Hostname (and path) to the root
-baseURL = "https://example.org/"
+baseURL = "https://www.gvnote.com"
 # theme list
 # theme = ["FixIt"] # enable in your site config file
 # determines default content language ["en", "zh-cn", "fr", "pl", ...]
-defaultContentLanguage = "en"
+defaultContentLanguage = "zh-cn"
 # language code ["en", "zh-CN", "fr", "pl", ...]
-languageCode = "en"
+languageCode = "zh-cn"
 # language name ["English", "简体中文", "Français", "Polski", ...]
-languageName = "English"
+languageName = "简体中文"
 # whether to include Chinese/Japanese/Korean
 hasCJKLanguage = false
 # copyright description used only for seo schema

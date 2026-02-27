@@ -6,14 +6,14 @@
 # FixIt 0.2.15 | CHANGED FixIt theme version
 version = "0.4.X" # e.g. "0.2.X", "0.2.15", "v0.2.15" etc.
 # site description
-description = ""
+description = "Share what I have learned and seen~"
 # site keywords
-keywords = []
+keywords = ["Gavin Blog","Gavin's Blog","GVNOTE","gvnote" ]
 # site default theme ["light", "dark", "auto"]
 defaultTheme = "auto"
 # which hash function used for SRI, when empty, no SRI is used
 # ["sha256", "sha384", "sha512", "md5"]
-fingerprint = ""
+fingerprint = "sha512"
 # date format
 dateFormat = "2006-01-02"
 # website images for Open Graph and Twitter Cards
@@ -45,10 +45,10 @@ disableThemeInject = false
 
 # Author Configuration
 [author]
-name = ""
-email = ""
-link = ""
-avatar = ""
+name = "w2422"
+email = "z242235718@163.com"
+link = "https://www.gvnote.com"
+avatar = "https://gravatar.com/userimage/277888267/7bc0280717949d9540b1d5456a38ebc1.jpeg?v=1772148038000&size=32"
 
 # FixIt 0.3.0 | NEW public Git repository information only then enableGitInfo is true
 [gitInfo]
@@ -66,7 +66,7 @@ issueTpl = "title=[BUG]%20{title}&body=|Field|Value|%0A|-|-|%0A|Title|{title}|%0
 # optional site title override for the app when added to an iOS home screen or Android launcher
 title = "FixIt"
 # whether to omit favicon resource links
-noFavicon = false
+noFavicon = true
 # modern SVG favicon to use in place of older style .png and .ico files
 svgFavicon = ""
 # Safari mask icon color
@@ -81,13 +81,13 @@ dark = "#252627"
 
 # Search config
 [search]
-enable = false
+enable = true
 # type of search engine ["algolia", "fuse", "cse", "post-chat"]
 type = "fuse"
 # max index length of the chunked content
 contentLength = 4000
 # placeholder of the search bar
-placeholder = ""
+placeholder = "请输入..."
 # max number of results length
 maxResultLength = 10
 # snippet length of the result
@@ -141,9 +141,9 @@ mobileMode = "auto"
 # Header title config
 [header.title]
 # URL of the LOGO
-logo = "/images/fixit.min.svg"
+#logo = "/images/blog.svg"
 # title name
-name = ""
+name = "Gavin's Blog"
 # you can add extra information before the name (HTML format is supported), such as icons
 pre = ""
 # you can add extra information after the name (HTML format is supported), such as icons
@@ -182,7 +182,7 @@ copyright = true
 # whether to show the author
 author = true
 # Site creation year
-since = ""
+since = "2023"
 # FixIt 0.2.12 | NEW Public network security only in China (HTML format is supported)
 gov = ""
 # ICP info only in China (HTML format is supported)
@@ -194,7 +194,7 @@ license = ""
 [footer.powered]
 enable = true
 hugoLogo = true
-themeLogo = true
+themeLogo = false
 
 # FixIt 0.2.17 | CHANGED Site creation time
 [footer.siteTime]
@@ -269,13 +269,13 @@ orderby = "name" # Order of tags, optional values: ["name", "count"]
 
 # Home page profile
 [home.profile]
-enable = false
+enable = true
 # FixIt 0.4.0 | NEW Whether to show profile and content only in the first home page
 onlyFirstPage = false
 # Gravatar Email for preferred avatar in home page
-gravatarEmail = ""
+gravatarEmail = "z242235718@163.com"
 # URL of avatar shown in home page, default is author's avatar
-avatarURL = ""
+avatarURL = "https://gravatar.com/userimage/277888267/7bc0280717949d9540b1d5456a38ebc1.jpeg?v=1772148038000&size=128"
 # FixIt 0.2.17 | NEW identifier of avatar menu link
 avatarMenu = ""
 # title shown in home page (HTML format is supported)
@@ -297,7 +297,7 @@ paginate = 6
 
 # FixIt 0.2.16 | CHANGED Social config about the author
 [social]
-GitHub = ""
+GitHub = "z242235718"
 Linkedin = ""
 Twitter = ""
 Instagram = ""
@@ -364,7 +364,7 @@ Liberapay = ""
 Ko-Fi = ""
 BuyMeaCoffee = ""
 Linktree = ""
-QQ = ""
+QQ = "242235718"
 QQGroup = "" # https://qun.qq.com/join.html
 Diaspora = ""
 CSDN = ""
@@ -384,14 +384,14 @@ TikTok = ""
 Credly = ""
 Bluesky = ""
 Phone = ""
-Email = ""
+Email = "z242235718@163.com"
 RSS = true
 
 # custom social links like the following
 # [params.social.twitter]
-# id = "lruihao"
-# weight = 3
-# prefix = "https://twitter.com/"
+#id = "lruihao"
+#weight = 3
+## prefix = "https://twitter.com/"
 # Title = "Twitter"
 
 # [params.social.twitter.icon]
@@ -470,11 +470,11 @@ selector = "article" # FixIt 0.2.17 | NEW
 # FixIt 0.2.12 | NEW Watermark config
 # Detail config see https://github.com/Lruihao/watermark#readme
 [watermark]
-enable = false
+enable = true
 # watermark's text (HTML format is supported)
-content = ""
+content = "www.gvnote.com"
 # watermark's transparency
-opacity = 0.1
+opacity = 0.02
 # watermark's width. unit: px
 width = 150
 # watermark's height. unit: px
