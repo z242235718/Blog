@@ -1,8 +1,8 @@
 ---
 title: "FRP配置TLS双向加密连接"
 subtitle: ""
-date: 2026-02-27T17:59:40+08:00
-lastmod: 2026-02-27T17:59:40+08:00
+date: 2025-03-07T17:59:40+08:00
+lastmod: 2025-03-08T17:59:40+08:00
 slug: frp-configuration-for-mutual-tls-encrypted
 description: "记录一下frp如何配置TLS双向加密，以防后面忘记如何配置。建立任意一个文件夹，在文件夹下创建my-openssl.cnf文件，并写入..."
 keywords:
