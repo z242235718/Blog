@@ -94,7 +94,7 @@ openssl req -new -sha256 -key server.key \
     -config <(cat my-openssl.cnf <(printf "\n[SAN]\nsubjectAltName=DNS:localhost,IP: FRP服务端公网 IP,DNS:example.server.com")) \
     -out server.csr
 
-#使用CA跟证书和私钥对csr进行签名，签发服务端证书,有效期365天
+#使用CA跟证书和私钥对csr进行签名，签发服务端证书
 openssl x509 -req -days 5000 -sha256 \
 	-in server.csr -CA ca.crt -CAkey ca.key -CAcreateserial \
 	-extfile <(printf "subjectAltName=DNS:localhost,IP: FRP服务端公网 IP,DNS:example.server.com") \
@@ -132,6 +132,8 @@ openssl x509 -req -days 5000 -sha256 \
 >
 >  在这里**客户端验证服务端证书时，检验的是①证书是否由可信的 CA 签发；② 客户端要实际连接的域名或 IP是否在证书的SAN中**，若不在会拒绝链接。
 
+<br>
+
 生成客户端证书：
 
 ```bash
@@ -156,6 +158,8 @@ openssl x509 -req -days 365 -sha256 \
 >  Q：服务端SAN字段与客户端SAN字段不一致，服务端是如何校验客户端证书的？
 >
 >  A：双向TLS中，服务端验证的重点是签发CA和用途，客户端证书是否有可信CA(ca.crt)签发 客户端证书扩展用途。除非服务端明确指定客户端的SAN，否则无强制要求。
+
+<br>
 
 生成完毕后，结果应该如下图所示：
 
