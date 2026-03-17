@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Hello - 分类 - Gavin&#39;s Blog</title>
+    <link>http://localhost:1313/categories/hello/</link>
+    <description>Share what I have learned and seen~</description>
+    <generator>Hugo 0.157.0 &amp; FixIt v0.4.2</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Fri, 27 Feb 2026 10:20:56 +0800</lastBuildDate>
+    <atom:link href="http://localhost:1313/categories/hello/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Hello World</title>
+      <link>http://localhost:1313/posts/hello-world/</link>
+      <pubDate>Fri, 27 Feb 2026 02:20:55 +0000</pubDate>
+      <guid>http://localhost:1313/posts/hello-world/</guid>
+      <category domain="http://localhost:1313/categories/hello/">Hello</category>
+      <description>&lt;p&gt;Welcome to Hugo FixIt! This is your very first post.&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

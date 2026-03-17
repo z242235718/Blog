@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html itemscope itemtype="http://schema.org/WebPage" lang="zh-cn">
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+    <meta name="robots" content="noodp" />
+    <title>FRP配置TLS双向加密连接 - Gavin&#39;s Blog</title><meta name="author" content="w2422">
+<meta name="description" content="记录一下frp如何配置TLS双向加密，以防后面忘记如何配置。建立任意一个文件夹，在文件夹下创建my-openssl.cnf文件，并写入..."><meta name="keywords" content='frp, tls'>
+  <meta itemprop="name" content="FRP配置TLS双向加密连接">
+  <meta itemprop="description" content="记录一下frp如何配置TLS双向加密，以防后面忘记如何配置。建立任意一个文件夹，在文件夹下创建my-openssl.cnf文件，并写入...">
+  <meta itemprop="datePublished" content="2026-02-27T17:59:40+08:00">
+  <meta itemprop="dateModified" content="2026-02-27T17:59:40+08:00">
+  <meta itemprop="keywords" content="frp,tls"><meta property="og:url" content="http://localhost:1313/posts/index/">
+  <meta property="og:site_name" content="Gavin&#39;s Blog">
+  <meta property="og:title" content="FRP配置TLS双向加密连接">
+  <meta property="og:description" content="记录一下frp如何配置TLS双向加密，以防后面忘记如何配置。建立任意一个文件夹，在文件夹下创建my-openssl.cnf文件，并写入...">
+  <meta property="og:locale" content="zh_cn">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2026-02-27T17:59:40+08:00">
+    <meta property="article:modified_time" content="2026-02-27T17:59:40+08:00">
+    <meta property="article:tag" content="Frp">
+    <meta property="article:tag" content="Tls">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="FRP配置TLS双向加密连接">
+  <meta name="twitter:description" content="记录一下frp如何配置TLS双向加密，以防后面忘记如何配置。建立任意一个文件夹，在文件夹下创建my-openssl.cnf文件，并写入...">
+<meta name="application-name" content="Gavin&#39;s Blog">
+<meta name="apple-mobile-web-app-title" content="Gavin&#39;s Blog"><meta name="theme-color" data-light="#f8f8f8" data-dark="#252627" content="#f8f8f8"><meta name="msapplication-TileColor" content="#da532c"><link rel="canonical" type="text/html" href="http://localhost:1313/posts/index/" title="FRP配置TLS双向加密连接 - Gavin&#39;s Blog" /><link rel="prev" type="text/html" href="http://localhost:1313/posts/pve-lxc-container-disk-grow/" title="PVE系列-LXC容器磁盘扩容" /><link rel="alternate" type="text/markdown" href="http://localhost:1313/posts/index/index.md" title="FRP配置TLS双向加密连接 - Gavin's Blog"><link rel="stylesheet" href="/css/config.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" href="/lib/animate/animate.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "BlogPosting",
+    "headline": "FRP配置TLS双向加密连接",
+    "inLanguage": "zh-cn",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "http:\/\/localhost:1313\/posts\/index\/"
+    },"genre": "posts","keywords": "frp, tls","wordcount":  0 ,
+    "url": "http:\/\/localhost:1313\/posts\/index\/","datePublished": "2026-02-27T17:59:40+08:00","dateModified": "2026-02-27T17:59:40+08:00","publisher": {
+      "@type": "Organization",
+      "name": ""},"author": {
+        "@type": "Person",
+        "name": "w2422"
+      },"description": "记录一下frp如何配置TLS双向加密，以防后面忘记如何配置。建立任意一个文件夹，在文件夹下创建my-openssl.cnf文件，并写入..."
+  }
+  </script><script src="/js/head/color-scheme.min.js"></script></head>
+  <body data-instant-intensity="viewport" data-header-desktop="sticky" data-header-mobile="auto"><div class="wrapper" data-page-style="normal"><header class="desktop animate__faster" id="header-desktop">
+  <div class="header-wrapper">
+    <div class="header-title">
+      <a href="/" title="Gavin&#39;s Blog"><span class="header-title-text">Gavin&#39;s Blog</span></a><span class="header-subtitle"></span></div>
+    <nav>
+      <ul class="menu"><li class="menu-item">
+              <a class="menu-link" href="/archives/"><i class="fa-solid fa-archive fa-sm" aria-hidden="true"></i> Archives</a></li><li class="menu-item">
+              <a class="menu-link" href="/categories/"><i class="fa-solid fa-folder-tree fa-sm" aria-hidden="true"></i> Categories</a></li><li class="menu-item">
+              <a class="menu-link" href="/tags/"><i class="fa-solid fa-tags fa-sm" aria-hidden="true"></i> Tags</a></li><li class="menu-item delimiter"></li><li class="menu-item search" id="search-desktop">
+            <input type="text" placeholder="请输入..." id="search-input-desktop">
+            <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+              <i class="fa-solid fa-search" aria-hidden="true"></i>
+            </a>
+            <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+              <i class="fa-solid fa-times-circle" aria-hidden="true"></i>
+            </a>
+            <span class="search-button search-loading" id="search-loading-desktop">
+              <i class="fa-solid fa-spinner fa-spin" aria-hidden="true"></i>
+            </span>
+          </li><li class="menu-item theme-switch" role="button" aria-label="切换主题" title="切换主题"><i class="fa-solid fa-adjust" aria-hidden="true"></i></li></ul>
+    </nav>
+  </div>
+</header><header class="mobile animate__faster" id="header-mobile">
+  <div class="header-container">
+    <div class="header-wrapper">
+      <div class="header-title">
+        <a href="/" title="Gavin&#39;s Blog"><span class="header-title-text">Gavin&#39;s Blog</span></a><span class="header-subtitle"></span></div>
+      <div class="theme-switch" role="button" aria-label="切换主题"><i class="fa-solid fa-adjust" aria-hidden="true"></i></div>
+      <div class="menu-toggle" id="menu-toggle-mobile" role="button" aria-labelledby="menu-mobile">
+        <span></span><span></span><span></span>
+      </div>
+    </div>
+    <nav>
+      <ul class="menu" id="menu-mobile"><li class="search-wrapper">
+            <div class="search mobile" id="search-mobile">
+              <input type="text" placeholder="请输入..." id="search-input-mobile">
+              <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                <i class="fa-solid fa-search" aria-hidden="true"></i>
+              </a>
+              <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                <i class="fa-solid fa-times-circle" aria-hidden="true"></i>
+              </a>
+              <span class="search-button search-loading" id="search-loading-mobile">
+                <i class="fa-solid fa-spinner fa-spin" aria-hidden="true"></i>
+              </span>
+            </div>
+            <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+              取消
+            </a>
+          </li><li class="menu-item"><a class="menu-link" href="/archives/"><i class="fa-solid fa-archive fa-sm" aria-hidden="true"></i> Archives</a></li><li class="menu-item"><a class="menu-link" href="/categories/"><i class="fa-solid fa-folder-tree fa-sm" aria-hidden="true"></i> Categories</a></li><li class="menu-item"><a class="menu-link" href="/tags/"><i class="fa-solid fa-tags fa-sm" aria-hidden="true"></i> Tags</a></li><li class="menu-item menu-system"></li>
+      </ul>
+    </nav>
+  </div>
+</header><div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+  </div>
+  <div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+  </div><main class="fi-container"><aside class="aside-collection animate__animated animate__fadeIn animate__faster" aria-label="合集"></aside>
+
+  <article class="page single">
+    <div class="header"><h1 class="single-title animate__animated animate__flipInX"><span>FRP配置TLS双向加密连接</span>
+      </h1></div><div class="post-meta">
+      <div class="post-meta-line"><span class="post-author"><a href="https://github.com/z242235718" title="作者" target="_blank" rel="external nofollow noopener noreferrer author" class="author"><img class="avatar" src='https://2.gravatar.com/userimage/277888267/a5dd7d088669f51623b8b85bd96a1552?size=64' alt="w2422" height="16" width="16">&nbsp;w2422</a></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/%E8%BF%90%E7%BB%B4/" class="post-category" title="分类 - 运维"><i class="fa-regular fa-folder" aria-hidden="true"></i> 运维</a></span></div><div class="post-meta-line"><span title="发布于 2026-02-27 17:59:40"><i class="fa-solid fa-calendar-days me-1" aria-hidden="true"></i><time datetime="2026-02-27">2026-02-27</time></span>&nbsp;<span title="0 字"><i class="fa-solid fa-pencil-alt me-1" aria-hidden="true"></i>约 100 字</span>&nbsp;<span><i class="fa-regular fa-clock me-1" aria-hidden="true"></i>预计阅读 0 分钟</span>&nbsp;</div>
+    </div><div class="content" id="content"></div><div class="post-footer" id="post-footer">
+  <div class="post-info">
+    <div class="post-info-line">
+      <div class="post-info-mod"><span title="更新于 2026-02-27 17:59:40">更新于 2026-02-27&nbsp;</span>
+      </div></div><div class="post-info-line">
+        <div class="post-info-md"><span><a href="/posts/index/index.md" title="阅读原始文档" class="link-to-markdown">阅读原始文档</a></span><span><a href="vscode://file/E:%5cDocument%5cmy-blog%5ccontent%5cposts%5cfrp-configuration-for-mutual-tls-encrypted%5cindex.md" title="在编辑器中打开" target="_blank" rel="external nofollow noopener noreferrer" class="link-to-vscode">在编辑器中打开</a></span></div>
+        <div class="post-info-share">
+          <span><a href="javascript:void(0);" title="分享到 X" data-sharer="twitter" data-url="http://localhost:1313/posts/index/" data-title="FRP配置TLS双向加密连接" data-hashtags="frp,tls"><i class="fa-brands fa-x-twitter" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 Facebook" data-sharer="facebook" data-url="http://localhost:1313/posts/index/" data-hashtag="frp"><i class="fa-brands fa-facebook-square" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="http://localhost:1313/posts/index/" data-title="FRP配置TLS双向加密连接"><i class="fa-brands fa-weibo" aria-hidden="true"></i></a>
+  </span>
+        </div>
+      </div></div>
+
+  <div class="post-info-more">
+    <section class="post-tags"><i class="fa-solid fa-tags me-1" aria-hidden="true"></i><a href="/tags/frp/" class="post-tag" title="标签 - Frp">Frp</a><a href="/tags/tls/" class="post-tag" title="标签 - Tls">Tls</a></section>
+    <section><span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+    </section>
+  </div><div class="post-nav"><a href="/posts/pve-lxc-container-disk-grow/" class="post-nav-item" rel="prev" title="PVE系列-LXC容器磁盘扩容"><i class="fa-solid fa-angle-left" aria-hidden="true"></i>PVE系列-LXC容器磁盘扩容</a></div>
+</div>
+</article>
+
+  <aside class="toc" id="toc-auto" aria-label="目录"></aside></main><footer class="footer">
+    <div class="footer-container"><div class="footer-line powered">由 <a href="https://gohugo.io/" target="_blank" rel="external nofollow noopener noreferrer" title="Hugo 0.157.0"><img class="hugo-icon" src="/images/hugo.min.svg" alt="Hugo logo" /> Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/hugo-fixit/FixIt" target="_blank" rel="external" title="FixIt v0.4.2">FixIt</a>
+        </div><div class="footer-line copyright" itemscope itemtype="http://schema.org/CreativeWork"><i class="fa-regular fa-copyright" aria-hidden="true"></i>
+            <span itemprop="copyrightYear">2023 - 2026</span><span class="author" itemprop="copyrightHolder">
+              <a href="https://github.com/z242235718" target="_blank" rel="external nofollow noopener noreferrer">w2422</a></span></div></div>
+  </footer></div><div class="widgets"><div class="fixed-buttons"><div class="fixed-button back-to-top animate__faster d-none" role="button" aria-label="回到顶部"><i class="fa-solid fa-arrow-up" aria-hidden="true"></i></div></div><div id="mask"></div><noscript>
+    <div class="noscript-warning">该网站在启用 JavaScript 的情况下效果最佳。</div>
+  </noscript>
+</div><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.css"><script src="/lib/autocomplete/autocomplete.min.js" defer></script><script src="/lib/fuse/fuse.min.js" defer></script><script src="/lib/sharer/sharer.min.js" async defer></script><script src="/lib/cookieconsent/cookieconsent.min.js" defer></script><script src="/lib/cell-watermark/watermark.min.js" defer></script><script src="/js/config/546f90df474dea4dc19bdb017d38fe03.js" defer></script><script src="/js/theme.min.js" defer></script><script src="/js/custom.min.js" defer></script></body>
+</html>
