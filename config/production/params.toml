@@ -1,0 +1,25 @@
+description = "Share what I have learned and seen~"
+keywords = ["GVNOTE", "gvnote", "gavin blog"]
+
+[author]
+name = "w2422"
+email = "z242235718@163.com"
+link = "https://github.com/z242235718"
+avatar = "https://gravatar.com/userimage/277888267/7bc0280717949d9540b1d5456a38ebc1.jpeg?v=1772148038000&size=64"
+
+[app]
+title = ""
+
+[header]
+
+
+
+[home]
+
+[home.profile]
+enable = true
+
+[customPartials]
+head = [
+  "inject/fixit-docs-bookmark.html",
+]
